@@ -1,16 +1,14 @@
 package org.example.mobile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MobilePhone {
     private String myNumber;
     private List<Contact> myContacts;
 
-    // Test sınıfının beklediği 2 parametreli Constructor
     public MobilePhone(String myNumber, List<Contact> myContacts) {
         this.myNumber = myNumber;
-        this.myContacts = myContacts != null ? myContacts : new ArrayList<>();
+        this.myContacts = myContacts;
     }
 
     public String getMyNumber() {
@@ -22,63 +20,65 @@ public class MobilePhone {
     }
 
     public boolean addNewContact(Contact contact) {
-        if (contact == null || findContact(contact.getName()) >= 0) {
+        if (contact == null || contact.getName() == null || contact.getPhoneNumber() == null) {
             return false;
         }
-        myContacts.add(contact);
-        return true;
-    }
-
-    public boolean updateContact(Contact oldContact, Contact newContact) {
-        int foundPosition = findContact(oldContact);
-        if (foundPosition < 0) {
+        if (findContact(contact.getName()) >= 0) {
             return false;
         }
-
-        int existingIndex = findContact(newContact.getName());
-        if (existingIndex >= 0 && existingIndex != foundPosition) {
-            return false;
-        }
-
-        myContacts.set(foundPosition, newContact);
-        return true;
-    }
-
-    public boolean removeContact(Contact contact) {
-        int foundPosition = findContact(contact);
-        if (foundPosition < 0) {
-            return false;
-        }
-        myContacts.remove(foundPosition);
-        return true;
+        return this.myContacts.add(contact);
     }
 
     public int findContact(Contact contact) {
-        return myContacts.indexOf(contact);
+        return this.myContacts.indexOf(contact);
     }
 
-    public int findContact(String name) {
-        for (int i = 0; i < myContacts.size(); i++) {
-            Contact contact = myContacts.get(i);
-            if (contact.getName().equalsIgnoreCase(name)) {
+    public int findContact(String contactName) {
+        for (int i = 0; i < this.myContacts.size(); i++) {
+            Contact contact = this.myContacts.get(i);
+            if (contact.getName().equalsIgnoreCase(contactName)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public Contact queryContact(String name) {
-        int position = findContact(name);
-        if (position >= 0) {
-            return myContacts.get(position);
+    public boolean updateContact(Contact oldContact, Contact newContact) {
+        int oldContactIndex = findContact(oldContact);
+        if (oldContactIndex < 0) {
+            return false;
         }
-        return null;
+        this.myContacts.set(oldContactIndex, newContact);
+        return true;
     }
 
-    public void printContact() {
-        System.out.println("Contact List:");
-        for (Contact contact : myContacts) {
-            System.out.println(contact.getName() + " -> " + contact.getPhoneNumber());
+    public boolean removeContact(Contact contact) {
+        if (contact == null || findContact(contact) < 0) {
+            return false;
         }
+        return this.myContacts.remove(contact);
+    }
+
+    public Contact queryContact(String contactName) {
+        int index = findContact(contactName);
+        if (index < 0) {
+            return null;
+        }
+        return this.myContacts.get(index);
+    }
+
+    public void printContacts() {
+        for (int i = 0; i < this.myContacts.size(); i++) {
+            Contact contact = this.myContacts.get(i);
+            System.out.println((i + 1) + ". " + contact.getName() + " -> " + contact.getPhoneNumber());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "MobilePhone{" +
+                "myNumber='" + myNumber + '\'' +
+                ", myContacts=" + myContacts +
+                '}';
     }
 }

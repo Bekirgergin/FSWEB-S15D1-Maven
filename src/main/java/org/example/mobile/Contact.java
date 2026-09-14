@@ -11,6 +11,10 @@ public class Contact {
         this.phoneNumber = phoneNumber;
     }
 
+    public static Contact createContact(String name, String phoneNumber) {
+        return new Contact(name, phoneNumber);
+    }
+
     public String getName() {
         return name;
     }
@@ -19,20 +23,24 @@ public class Contact {
         return phoneNumber;
     }
 
-    public static Contact createContact(String name, String phoneNumber) {
-        return new Contact(name, phoneNumber);
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Contact contact = (Contact) o;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Contact contact = (Contact) object;
         return Objects.equals(name, contact.name) && Objects.equals(phoneNumber, contact.phoneNumber);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name, phoneNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
